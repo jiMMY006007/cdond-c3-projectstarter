@@ -185,7 +185,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - inv/inventory.txt
+            - ./inv/inventory.txt
 
       - destroy-environment
 
