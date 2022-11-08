@@ -177,15 +177,19 @@ jobs:
           name: Add back-end ip to ansible inventory
           command: |
             yum install -y tar gzip
-            #echo "[web]" > inventory.txt
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+            echo "[web]" > inventory.txt
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >>inventory.txt
             cat inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
             - cdond-c3-projectstarter/.circleci/ansible/inventory.txt
 
-      - destroy-environment    
+      - destroy-environment
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   configure-infrastructure:
     docker:
@@ -207,7 +211,11 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
-      - destroy-environment     
+      - destroy-environment 
+
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
 #   run-migrations:
 #     docker:
