@@ -187,28 +187,28 @@ jobs:
 
       - destroy-environment
 
-  # configure-infrastructure:
-  #   docker:
-  #     - image: python:3.7-alpine3.11
-  #   steps:
-  #     - checkout
-  #     - add_ssh_keys:
-  #         # You can get this ID in the section where you registered the SSH Key
-  #         fingerprints: ["83:d8:9c:da:0e:6e:fd:b9:52:9b:87:7a:d5:58:50:c4"] 
-  #     - attach_workspace:
-  #         at: ~/
-  #     - run:
-  #         name: Install dependencies
-  #         command: |
-  #           apk add --update tar gzip ansible
-  #           pip3 install awscli
-  #     - run:
-  #         name: Configure server
-  #         command: |
-  #           cd .circleci/ansible
-  #           ansible-playbook -i ~/inventory.txt configure-server.yml
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+          # You can get this ID in the section where you registered the SSH Key
+          fingerprints: ["92:1f:f7:b8:87:b3:bf:8d:35:12:d2:1c:49:4a:e3:9e"] 
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --update tar gzip ansible
+            pip3 install awscli
+      - run:
+          name: Configure server
+          command: |
+            cd .circleci/ansible
+            ansible-playbook -i ~/inventory.txt configure-server.yml
 
-  #     - destroy-environment 
+      - destroy-environment 
 
 #   run-migrations:
 #     docker:
