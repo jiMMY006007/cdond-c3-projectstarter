@@ -162,7 +162,7 @@ jobs:
               --template-file .circleci/files/backend.yml \
               --tags project=udapeople \
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
-              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  
+              --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"
     
       - run:
           name: Ensure front-end infrastructure exist
@@ -185,38 +185,30 @@ jobs:
           paths:
             - inventory.txt
 
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
       - destroy-environment
 
-  configure-infrastructure:
-    docker:
-      - image: python:3.7-alpine3.11
-    steps:
-      - checkout
-      - add_ssh_keys:
-          # You can get this ID in the section where you registered the SSH Key
-          fingerprints: ["83:d8:9c:da:0e:6e:fd:b9:52:9b:87:7a:d5:58:50:c4"] 
-      - attach_workspace:
-          at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apk add --update tar gzip ansible
-            pip3 install awscli
-      - run:
-          name: Configure server
-          command: |
-            cd .circleci/ansible
-            ansible-playbook -i ~/inventory.txt configure-server.yml
+  # configure-infrastructure:
+  #   docker:
+  #     - image: python:3.7-alpine3.11
+  #   steps:
+  #     - checkout
+  #     - add_ssh_keys:
+  #         # You can get this ID in the section where you registered the SSH Key
+  #         fingerprints: ["83:d8:9c:da:0e:6e:fd:b9:52:9b:87:7a:d5:58:50:c4"] 
+  #     - attach_workspace:
+  #         at: ~/
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           apk add --update tar gzip ansible
+  #           pip3 install awscli
+  #     - run:
+  #         name: Configure server
+  #         command: |
+  #           cd .circleci/ansible
+  #           ansible-playbook -i ~/inventory.txt configure-server.yml
 
-      - slack/notify:
-          event: fail
-          template: basic_fail_1
-
-      - destroy-environment 
+  #     - destroy-environment 
 
 #   run-migrations:
 #     docker:
