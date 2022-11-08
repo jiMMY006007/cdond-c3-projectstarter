@@ -185,11 +185,11 @@ jobs:
           paths:
             - ./*
 
-      - destroy-environment
-
       - slack/notify:
           event: fail
           template: basic_fail_1
+
+      - destroy-environment
 
   configure-infrastructure:
     docker:
@@ -212,11 +212,11 @@ jobs:
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
 
-      - destroy-environment 
-
       - slack/notify:
           event: fail
           template: basic_fail_1
+
+      - destroy-environment 
 
 #   run-migrations:
 #     docker:
