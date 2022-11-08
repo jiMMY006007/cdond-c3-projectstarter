@@ -1,4 +1,7 @@
 version: 2.1
+orbs:
+  #node: 'circleci/node:4.1'
+  slack: circleci/slack@4.1
 
 # commands:
 #   destroy-environment:
@@ -112,6 +115,9 @@ jobs:
             npm audit fix --audit-level=critical --force
             # If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
             npm audit --audit-level=critical
+      - slack/notify:
+          event: fail
+          template: basic_fail_1
 
   scan-backend:
     docker:
@@ -127,7 +133,7 @@ jobs:
             npm install
             # npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
-            #npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical --force
             # If the "npm audit fix" command above could not fix all critical vulnerabilities, try “npm audit fix --force” again
             npm audit --audit-level=critical
 
@@ -298,7 +304,7 @@ jobs:
             
 
 workflows:
-  default:
+  deploy_and_notify:
     jobs:
       - build-frontend
       - build-backend
