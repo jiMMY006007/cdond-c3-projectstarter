@@ -178,12 +178,12 @@ jobs:
           command: |
             yum install -y tar gzip
             #echo "[web]" > inventory.txt
-            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> /cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> cdond-c3-projectstarter/.circleci/ansible/inventory.txt
             cat inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
-            - /cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+            - cdond-c3-projectstarter/.circleci/ansible/inventory.txt
 
       - destroy-environment    
 
@@ -340,8 +340,8 @@ workflows:
           # filters:
           #   branches:
           #     only: [test-feature-branch]
-      # - configure-infrastructure:
-      #     requires: [deploy-infrastructure]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:
