@@ -4,10 +4,7 @@
     update_cache: yes
 
 - name: "upgrade packages"
-  become: true
-  apt:
-    upgrade: yes
-
+  apt: upgrade=dist force_apt_get=yes
 
 - name: remove dependencies that are no longer required
   become: true
