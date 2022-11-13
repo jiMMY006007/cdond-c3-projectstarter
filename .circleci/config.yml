@@ -234,6 +234,7 @@ jobs:
             # npm i python3
             # pip3 install awscli
             npm install typescript -g
+            npm install -g ts-node
             npm i
             npm run build
             # npm audit fix --audit-level=critical --force
