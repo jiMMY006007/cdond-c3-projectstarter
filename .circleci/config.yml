@@ -287,17 +287,17 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip3 install ansible
-            pip3 install awscli
+            pip3 install ansible tar gzip
+            pip3 install awscli npm
       - run:
           name: Deploy backend
           command: |
-            # cd backend
-            # npm i
-            # npm run build
-            # cd ..
+            cd backend
+            npm i
+            npm run build
+            cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
+            tar -C backend -czvf artifact.tar.gz .circleci/ansible/roles/deploy/files
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
@@ -419,11 +419,11 @@ workflows:
           requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
-      # - deploy-backend:
-      #     requires: [run-migrations]
-      # - smoke-test:
-      #     requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - deploy-backend:
+          requires: [run-migrations]
+      - smoke-test:
+          requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
