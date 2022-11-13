@@ -231,8 +231,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            npm i python3
-            pip3 install awscli
+            # npm i python3
+            # pip3 install awscli
             # npm install typescript -g
             npm run build
             # npm audit fix --audit-level=critical --force
