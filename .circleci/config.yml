@@ -213,7 +213,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node
     steps:
       - checkout
       - run:
@@ -233,7 +233,7 @@ jobs:
             cd backend
             # npm i python3
             # pip3 install awscli
-            # npm install typescript -g
+            npm install typescript -g
             npm i
             npm run build
             # npm audit fix --audit-level=critical --force
@@ -260,7 +260,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            yum install -y npm tar gzip
+            yum install -y tar gzip
+            yum install -y nodejs npm --enablerepo=epel
       - run:
           name: Get backend url
           command: |
@@ -413,15 +414,16 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend] 
-      - deploy-infrastructure:
-          requires: [test-frontend, test-backend]
-      #     # filters:
-      #     #   branches:
-      #     #     only: [test-feature-branch]
-      - configure-infrastructure:
-          requires: [deploy-infrastructure]
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend]
+      # #     # filters:
+      # #     #   branches:
+      # #     #     only: [test-feature-branch]
+      # - configure-infrastructure:
+      #     requires: [deploy-infrastructure]
       - run-migrations:
-          requires: [configure-infrastructure]
+          requires: [test-frontend, test-backend]
+          # requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
       - deploy-backend:
