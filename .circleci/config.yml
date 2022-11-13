@@ -424,7 +424,7 @@ workflows:
       # - configure-infrastructure:
       #     requires: [deploy-infrastructure]
       - run-migrations:
-          requires: [test-frontend, test-backend]
+          requires: [test-backend]
           # requires: [configure-infrastructure]
       - deploy-frontend:
           requires: [run-migrations]
