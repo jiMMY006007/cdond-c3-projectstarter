@@ -213,22 +213,22 @@ jobs:
 
   run-migrations:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
-            yum install -y nodejs
-            yum install -y tar gzip 
+            #curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+            #yum install -y nodejs
+            #yum install -y tar gzip 
       - run:
           name: Run migrations
           command: |
             cd backend
             npm i
-            npm install typescript -g
-            # npm install -g aws-cli
+            # npm install typescript -g
+            npm install -g aws-cli
             npm run build
             # npm audit fix --audit-level=critical --force
             # npm audit --audit-level=critical
