@@ -360,15 +360,15 @@ jobs:
             # Get backend url
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             echo $BACKEND_IP
-            export API_URL="http://$(BACKEND_IP):3030"
+            export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
-                return 0
+                exit 0
             else
-                return 1
+                exit 1
             fi
-            
+
       - run:
           name: Frontend smoke test.
           command: |
@@ -376,9 +376,9 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              return 1
+              exit 1
             else
-              return 1
+              exit 1
             fi
 
       - empty-s3bucket
