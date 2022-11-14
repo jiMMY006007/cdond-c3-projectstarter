@@ -381,9 +381,9 @@ jobs:
               exit 1
             fi
 
-      - empty-s3bucket
-      - destroy-environment
-      - revert-migrations 
+      # - empty-s3bucket
+      # - destroy-environment
+      # - revert-migrations 
 
   cloudfront-update:
     docker:
