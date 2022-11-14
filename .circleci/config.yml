@@ -16,11 +16,9 @@ commands:
 
   revert-migrations:
     description: Revert the last migration if successfully run in the current workflow.
-
     steps:
       - restore_cache:
             keys: [backend-build]
-
       - attach_workspace:
           at: ~/      
       - run:
@@ -333,7 +331,7 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz  ~/project/.circleci/ansible/roles/deploy/files/artifact.tar.gz
+            tar -C backend -czvf artifact.tar.gz  .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
@@ -344,13 +342,18 @@ jobs:
 
   smoke-test:
     docker:
-      - image: amazon/aws-cli 
+      - image: cimg/node:13.8.0 
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            yum install -y tar gzip curl nodejs npm
+            sudo apt -y update
+            sudo apt install -yy python3-pip
+            sudo apt install -y tar gzip
+            pip3 install --upgrade pip
+            pip3 install awscli
+
       - run:
           name: Get backend url
           command: |
@@ -374,22 +377,28 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              return 0
+              return 1
             else
               return 1
             fi
 
-      - destroy-environment  
+      - empty-s3bucket
+      - destroy-environment
+      - revert-migrations 
 
   cloudfront-update:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:13.8.0 
     steps:
       - checkout
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo apt -y update
+            sudo apt install -yy python3-pip
+            sudo apt install -y tar gzip
+            pip3 install --upgrade pip
+            pip3 install awscli
       - run:
           name: Update cloudfront distribution
           command: |
@@ -400,7 +409,9 @@ jobs:
               --parameter-overrides WorkflowID="udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople
 
-      - destroy-environment   
+      - empty-s3bucket
+      - destroy-environment
+      - revert-migrations    
 
   cleanup:
       docker:
