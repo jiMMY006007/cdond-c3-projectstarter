@@ -1,14 +1,17 @@
 ---
 
-- name: Copy backend
-  template:
-    src: "files/artifact.tar.gz"
-    dest: "~/"
+- name: "create project dir"
+  shell: mkdir ~/backend
 
-- name: extract backend
-  ansible.builtin.unarchive:
-    src: ~/artifact.tar.gz
-    dest: ~/
+- name: "send build atrifacts"
+  unarchive:
+    src: ../../artifact.tar.gz
+    dest: ~/backend
+
+# - name: extract backend
+#   ansible.builtin.unarchive:
+#     src: ~/artifact.tar.gz
+#     dest: ~/
 
 - name: "Excute node app with pm2"
   shell: |
