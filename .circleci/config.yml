@@ -311,7 +311,7 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints: ["92:1f:f7:b8:87:b3:bf:8d:35:12:d2:1c:49:4a:e3:9e"]
-           
+
       - restore_cache:
           keys: [backend-build]
       - attach_workspace:
@@ -333,7 +333,7 @@ jobs:
             npm run build
             cd ..
             # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .circleci/ansible/roles/deploy/files
+            tar -C backend -czvf artifact.tar.gz  ~/project/.circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
