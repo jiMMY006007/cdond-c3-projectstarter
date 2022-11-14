@@ -19,13 +19,14 @@ commands:
     steps:
       - restore_cache:
             keys: [backend-build]
+
       - attach_workspace:
           at: ~/      
       - run:
           name: Revert migrations
           when: on_fail
           command: |
-            SUCCESS =$(cat project/backend/result.txt)
+            SUCCESS=$(cat ~/project/backend/result.txt)
             if(( $SUCCESS==1 )); 
             then
               cd ~/project/backend
@@ -239,7 +240,6 @@ jobs:
           name: Send migration result
           command: |
             cat ~/project/backend/migrations_dump.txt
-            touch ~/project/backend/result.txt
             if grep -q "has been executed successfully." ~/project/backend/migrations_dump.txt
             then
                 echo 1 > ~/project/backend/result.txt
@@ -362,7 +362,8 @@ jobs:
       - run:
           name: Backend smoke test.
           command: |
-            export API_URL="http://${aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text}:3030"
+            echo $BACKEND_IP
+            export API_URL="http://$(BACKEND_IP):3030"
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
