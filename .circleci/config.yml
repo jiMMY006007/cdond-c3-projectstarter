@@ -27,7 +27,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(cat ~/project/backend/result.txt)
-            if(( $SUCCESS == 1 )); 
+            if(( $SUCCESS = 1 )); 
             then
               cd ~/project/backend
               npm install
@@ -379,7 +379,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              exit 1
+              exit 0
             else
               exit 1
             fi
