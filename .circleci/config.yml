@@ -35,6 +35,15 @@ commands:
               npm run migrations:revert
             fi      
 
+  empty-s3bucket:
+    description: Empty an S3 bucket to allow for its deletion.
+    steps:
+      - run:
+          name: Empty s3 bucket.
+          when: on_fail
+          command: |
+            aws s3 rm "s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7}" --recursive
+
 jobs:
   build-frontend:
     docker:
@@ -291,7 +300,8 @@ jobs:
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-
+      
+      - empty-s3bucket
       - destroy-environment    
                     
   deploy-backend:
@@ -300,7 +310,10 @@ jobs:
     steps:
       - checkout
       - add_ssh_keys:
-          fingerprints: ["92:1f:f7:b8:87:b3:bf:8d:35:12:d2:1c:49:4a:e3:9e"] 
+          fingerprints: ["92:1f:f7:b8:87:b3:bf:8d:35:12:d2:1c:49:4a:e3:9e"]
+           
+      - restore_cache:
+          keys: [backend-build]
       - attach_workspace:
           at: ~/
       - run:
@@ -325,7 +338,8 @@ jobs:
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
-
+      
+      - empty-s3bucket
       - destroy-environment 
 
   smoke-test:
