@@ -353,15 +353,12 @@ jobs:
             sudo apt install -y tar gzip
             pip3 install --upgrade pip
             pip3 install awscli
-
-      - run:
-          name: Get backend url
-          command: |
-            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
-            echo $BACKEND_IP
+            
       - run:
           name: Backend smoke test.
           command: |
+            # Get backend url
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             echo $BACKEND_IP
             export API_URL="http://$(BACKEND_IP):3030"
             echo "${API_URL}"
@@ -371,6 +368,7 @@ jobs:
             else
                 return 1
             fi
+            
       - run:
           name: Frontend smoke test.
           command: |
