@@ -345,6 +345,8 @@ jobs:
       - image: cimg/node:13.8.0 
     steps:
       - checkout
+      - attach_workspace:
+          at: .
       - run:
           name: Install dependencies
           command: |
@@ -353,10 +355,10 @@ jobs:
             sudo apt install -y tar gzip
             pip3 install --upgrade pip
             pip3 install awscli
-            
       - run:
           name: Backend smoke test.
           command: |
+            source .env
             # Get backend url
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --output text)
             echo $BACKEND_IP
