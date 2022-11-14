@@ -27,7 +27,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(cat ~/project/backend/result.txt)
-            if(( $SUCCESS==1 )); 
+            if(( $SUCCESS == 1 )); 
             then
               cd ~/project/backend
               npm install
@@ -458,9 +458,9 @@ workflows:
           requires: [build-frontend] 
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-backend, scan-frontend]
-      #     # filters:
-      #     #   branches:
-      #     #     only: [test-feature-branch]
+          filters:
+            branches:
+              only: [master]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       - run-migrations:
