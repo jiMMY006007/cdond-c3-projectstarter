@@ -308,15 +308,15 @@ jobs:
           command: |
             sudo apt -y update
             sudo apt install -yy python3-pip
-            sudo apt install -y tar
+            sudo apt install -y tar gzip
             pip3 install --upgrade pip
-            pip3 install ansible gzip
-            pip3 install awscli npm
+            pip3 install ansible
+            pip3 install awscli
       - run:
           name: Deploy backend
           command: |
             cd backend
-            npm i
+            npm install
             npm run build
             cd ..
             # Zip the directory
