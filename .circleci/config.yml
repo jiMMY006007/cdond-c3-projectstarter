@@ -27,6 +27,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(cat ~/project/backend/result.txt)
+            echo $SUCCESS
             if [[ "$SUCCESS" = 1 ]]; 
             then
               cd ~/project/backend
