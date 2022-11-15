@@ -1,0 +1,2 @@
+[URL01] https://github.com/jiMMY006007/cdond-c3-projectstarter.git
+[URL02] http://udapeople-6c7cfe0.s3-website-us-east-1.amazonaws.com
