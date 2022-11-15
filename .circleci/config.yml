@@ -453,14 +453,11 @@ jobs:
 workflows:
   deploy_and_notify:
     jobs:
-      - build-frontend:
-          filters:
-              branches:
-                only: [dev-branch]
-      - build-backend:
-          filters:
-              branches:
-                only: [dev-branch]
+      - build-frontend
+      - build-backend
+          # filters:
+          #     branches:
+          #       only: [dev-branch]
       - test-frontend:
           requires: [build-frontend]
       - test-backend:
