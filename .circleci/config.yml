@@ -380,7 +380,7 @@ jobs:
             echo ${URL} 
             if curl -s ${URL} | grep "Welcome"
             then
-              exit 1
+              exit 0
             else
               exit 1
             fi
@@ -453,7 +453,10 @@ jobs:
 workflows:
   deploy_and_notify:
     jobs:
-      - build-frontend
+      - build-frontend:
+          filters:
+              branches:
+                only: [dev-branch]
       - build-backend
       - test-frontend:
           requires: [build-frontend]
